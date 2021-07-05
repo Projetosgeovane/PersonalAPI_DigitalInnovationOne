@@ -1,4 +1,5 @@
 package com.digitalinnovation.personalapi.dto;
 
-public class j {
+public class j{
+
 }
