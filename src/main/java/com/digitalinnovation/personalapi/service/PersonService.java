@@ -8,13 +8,9 @@ import com.digitalinnovation.personalapi.mapper.PersonMapper;
 import com.digitalinnovation.personalapi.repository.PersonRepository;
 import com.digitalinnovation.personalapi.exception.PersonNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +30,7 @@ public class PersonService {
 
 
         Person savedPerson = personRepository.save(personToSave);
-        return MessageResponseDTO
-                .builder()
-                .message("Created person with ID " + savedPerson.getId())
-                .build();
+        return createMessageResponse(savedPerson.getId(), "created person with Id ");
 
     }
 
@@ -60,8 +53,25 @@ public class PersonService {
        personRepository.deleteById(id);
     }
 
+
+    public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
+        verifyIfExists(id);
+
+        Person personToUpdate = personMapper.toModel(personDTO);
+
+        Person updatePerson = personRepository.save(personToUpdate);
+        return createMessageResponse(updatePerson.getId(), "Update person with Id ");
+    }
+
     private Person verifyIfExists(Long id) throws PersonNotFoundException{
         return personRepository.findById(id)
                 .orElseThrow(() -> new PersonNotFoundException(id));
+    }
+
+    private MessageResponseDTO createMessageResponse(Long id, String created_person_with_id_) {
+        return MessageResponseDTO
+                .builder()
+                .message("Update person with Id " + id)
+                .build();
     }
 }
