@@ -19,37 +19,36 @@ import java.util.List;
 public class PersonController {
 
 
-    private PersonService personService;
+
+    private final PersonService personService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO){
-    return personService.createPerson(personDTO);
-
-    }
-
-   @GetMapping
-    public List<PersonDTO> listAll(){
-        return personService.listAll();
-
+    public MessageResponseDTO create(@RequestBody @Valid PersonDTO personDTO) {
+        return personService.create(personDTO);
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public PersonDTO findById(@PathVariable Long id) throws PersonNotFoundException {
         return personService.findById(id);
     }
 
-    @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody PersonDTO personDTO) throws PersonNotFoundException {
+    @GetMapping
+    public List<PersonDTO> listAll() {
+        return personService.listAll();
+    }
 
-        return personService.updateById(id, personDTO);
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public MessageResponseDTO update(@PathVariable Long id, @RequestBody @Valid PersonDTO personDTO) throws PersonNotFoundException {
+        return personService.update(id, personDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) throws PersonNotFoundException {
+    public void delete(@PathVariable Long id) throws PersonNotFoundException {
         personService.delete(id);
-
     }
 
 }
